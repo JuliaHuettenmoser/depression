@@ -54,9 +54,9 @@ function MainContainer() {
 
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={detailsName} component={DetailsScreen} />
-        <Tab.Screen name={settingsName} component={SettingsScreen} />
         <Tab.Screen name={mailName} component={MailScreen} />
-
+        <Tab.Screen name={settingsName} component={SettingsScreen} />
+        
       </Tab.Navigator>
     </NavigationContainer>
   );
