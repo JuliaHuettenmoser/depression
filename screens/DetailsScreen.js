@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import ReminderModal from '../components/ReminderModal';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ReminderItem from '../components/ReminderItem'; // Make sure the path is correct
 
 export default function DetailsScreen() {
   const [reminders, setReminders] = useState([]);
@@ -24,6 +25,10 @@ export default function DetailsScreen() {
     setIsModalVisible(false);
   };
 
+  const handleDeleteReminder = (id) => {
+    setReminders(currentReminders => currentReminders.filter(reminder => reminder.id !== id));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -34,10 +39,10 @@ export default function DetailsScreen() {
         data={reminders}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.reminderItem}>
-            <Text style={styles.reminderText}>{item.name}</Text>
-            <Text style={styles.reminderSubText}>{item.time} - {item.weekdays.join(', ')}</Text>
-          </View>
+          <ReminderItem
+            reminder={item}
+            onDelete={handleDeleteReminder}
+          />
         )}
       />
       <TouchableOpacity onPress={handleAddReminder} style={styles.addButton}>
@@ -55,56 +60,46 @@ export default function DetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f2f5', // Lighter background
+    backgroundColor: '#f7f7f7', // A softer background color
   },
   header: {
     paddingHorizontal: 20,
-    paddingTop: 20, // Increased padding
+    paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: '#0056b3', // A bit deeper blue
-    borderBottomLeftRadius: 25, // More pronounced rounded corners
-    borderBottomRightRadius: 25,
+    backgroundColor: '#007bff', // A vibrant header color
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: "#000", // Adding shadow for depth
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   screenTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'center',
   },
-  reminderItem: {
-    backgroundColor: '#ffffff', // Ensure high contrast for readability
-    padding: 25, // More spacious padding
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 20, // More rounded corners
-    elevation: 5, // Higher elevation for more pronounced shadow
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4.65,
-  },
-  reminderText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  reminderSubText: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
   addButton: {
-    backgroundColor: '#4CAF50', // A fresher green
-    padding: 20, // Larger touch area
-    borderRadius: 60, // Perfect circle with increased size
+    backgroundColor: '#28a745', // A lively green for the add button
+    padding: 15,
+    borderRadius: 30, // Making it a perfect circle
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 25, // Slightly more offset from the bottom
-    right: 25,
-    elevation: 6, // More pronounced elevation
+    bottom: 30,
+    right: 30,
+    shadowColor: "#000", // Adding shadow for depth
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

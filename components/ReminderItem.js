@@ -1,50 +1,54 @@
-    // components/ReminderItem.js
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ReminderItem = ({ reminder, onPress }) => {
+const ReminderItem = ({ reminder, onDelete }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.pillbox}>
-            <MaterialCommunityIcons name="pill" style={styles.pill}/>
-            <Text style={styles.text}>{reminder.name}</Text>
-            <View style={styles.details}>
-                <Text style={styles.timer}>{reminder.time}</Text>
-                <Text style={styles.weekday}>{reminder.weekday}</Text>
+        <View style={styles.reminderItem}>
+            <View style={{flex: 1}}>
+                <Text style={styles.reminderText}>{reminder.name}</Text>
+                <Text style={styles.reminderSubText}>{reminder.time} - {reminder.weekdays.join(', ')}</Text>
             </View>
-        </TouchableOpacity>
+            <TouchableOpacity onPress={() => onDelete(reminder.id)} style={styles.deleteButton}>
+                <MaterialCommunityIcons name="delete" size={24} color="#d11a2a" />
+            </TouchableOpacity>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    pillbox: {
-        backgroundColor: "#e3e3e3",
-        borderRadius: 5,
-        marginVertical: 5,
-        padding: 10,
-        flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    text: {
-        fontSize: 20,
-        marginLeft: 10
-    },
-    pill: {
-        color: "white",
-        fontSize: 25
-    },
-    details: {
+    reminderItem: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#ffffff', // White background for each item
+        borderRadius: 12,
+        marginHorizontal: 20,
+        marginVertical: 8,
+        padding: 16,
+        shadowColor: "#000", // Shadow for depth
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        elevation: 4,
     },
-    timer: {
-        fontSize: 16,
-        marginRight: 10
+    reminderText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333333', // Darker text for better readability
     },
-    weekday: {
-        fontSize: 16
+    reminderSubText: {
+        fontSize: 14,
+        color: '#666666', // Slightly lighter text for sub info
+        marginTop: 4,
+    },
+    deleteButton: {
+        marginLeft: 'auto', // Pushes the button to the end of the container
+        padding: 8, // Easier to press
     },
 });
+
 
 export default ReminderItem;
