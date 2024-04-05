@@ -1,31 +1,41 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function HomeScreen({ navigation }) {
-    const [modalVisible, setModalVisible] = useState(false);
     const [selected, setSelected] = useState('');
     const [markedDates, setMarkedDates] = useState({});
+    const [dayNotes, setDayNotes] = useState({});
 
     const markDate = (mood) => {
         const color = moodColor(mood);
+        // Now also keeping the existing note (if any) when marking a day
         const newMarkedDates = {
             ...markedDates,
-            [selected]: { selected: true, color, textColor: 'white' }
+            [selected]: { 
+                selected: true, 
+                color, 
+                textColor: 'white',
+                note: dayNotes[selected] // Save the note with the marked date
+            }
         };
         setMarkedDates(newMarkedDates);
-        setModalVisible(false);
     };
 
     const moodColor = (mood) => {
         switch (mood) {
-            case 'happy': return '#98FB98'; // Pale Green
-            case 'neutral': return '#FFD700'; // Gold
-            case 'sad': return '#FF6347'; // Tomato
-            case 'sick': return '#9370DB'; // Medium Purple
+            case 'happy': return '#98FB98';
+            case 'neutral': return '#FFD700';
+            case 'sad': return '#FF6347';
+            case 'sick': return '#9370DB';
             default: return 'gray';
         }
+    };
+
+    // Update dayNotes state when the text input changes
+    const handleNoteChange = (text) => {
+        setDayNotes({ ...dayNotes, [selected]: text });
     };
 
     return (
@@ -37,10 +47,13 @@ export default function HomeScreen({ navigation }) {
                     selectedDayBackgroundColor: '#00adf5',
                     todayTextColor: '#00adf5',
                     arrowColor: 'gray',
+                    selectedDayTextColor: "#00adf5",
+                    selectedDayBackgroundColor: "green"
                 }}
                 onDayPress={day => {
                     setSelected(day.dateString);
                 }}
+                enableSwipeMonths={true}
             />
             <Text style={styles.feelsTxt}>How are you feeling today?</Text>
             <View style={styles.iconContainer}>
@@ -57,26 +70,19 @@ export default function HomeScreen({ navigation }) {
                     <MaterialCommunityIcons name="emoticon-sick-outline" size={48} color={"#9370DB"}/>
                 </TouchableOpacity>
             </View>
-            <Modal
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Image
-                            style={styles.modalImage}
-                            source={{ uri: "https://media.tenor.com/lCKwsD2OW1kAAAAj/happy-cat-happy-happy-cat.gif" }}
-                        />
-                        <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-                            <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+            {selected && ( // Display TextInput only if a day is selected
+                <TextInput
+                    style={styles.noteInput}
+                    onChangeText={handleNoteChange}
+                    value={dayNotes[selected] || ''} // Use existing note if available
+                    placeholder="Enter your note here..."
+                    multiline
+                />
+            )}
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -129,5 +135,15 @@ const styles = StyleSheet.create({
     closeButtonText: {
         color: 'white',
         fontWeight: 'bold',
+    },
+
+    noteInput: {
+        height: 100,
+        margin: 20,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5, 
+        borderColor: '#ccc',
+        backgroundColor: 'white'
     }
 });
