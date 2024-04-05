@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  Appearance
 } from 'react-native';
 import ReminderModal from '../components/ReminderModal';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -31,9 +32,12 @@ export default function DetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="#4aa9f7" />
       <View style={styles.header}>
-        <Text style={styles.screenTitle}>Your Reminders</Text>
+        <Text style={styles.screenTitle}>Reminders</Text>
+        <TouchableOpacity onPress={handleAddReminder}>
+          <MaterialCommunityIcons name="plus-circle" size={30} color="#ffffff" />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={reminders}
@@ -45,9 +49,7 @@ export default function DetailsScreen() {
           />
         )}
       />
-      <TouchableOpacity onPress={handleAddReminder} style={styles.addButton}>
-        <MaterialCommunityIcons name="plus" size={24} color="#ffffff" />
-      </TouchableOpacity>
+      
       <ReminderModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
@@ -60,16 +62,19 @@ export default function DetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f7f7f7', // A softer background color
+    backgroundColor: '#f7f7f7',
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 20,
-    backgroundColor: '#007bff', // A vibrant header color
+    paddingBottom: 10,
+    backgroundColor: '#4aa9f7',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    shadowColor: "#000", // Adding shadow for depth
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -82,24 +87,5 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: '#ffffff',
-    textAlign: 'center',
-  },
-  addButton: {
-    backgroundColor: '#28a745', // A lively green for the add button
-    padding: 15,
-    borderRadius: 30, // Making it a perfect circle
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
-    shadowColor: "#000", // Adding shadow for depth
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+  }
 });

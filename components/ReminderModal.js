@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView, Appearance } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -33,7 +33,6 @@ const ReminderModal = ({ visible, onClose, onSave }) => {
 
     const handleTimeConfirm = (selectedTime) => {
         hideTimePicker();
-        // Format time to exclude seconds
         setTime(selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     };
 
@@ -46,33 +45,38 @@ const ReminderModal = ({ visible, onClose, onSave }) => {
         >
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text>Name:</Text>
+                    <Text style={styles.title}>Add Reminder</Text>
                     <TextInput
                         style={styles.input}
                         value={name}
                         onChangeText={setName}
+                        placeholder="Name"
                     />
-                    <Button title="Pick Time" onPress={showTimePicker} />
-                    <Text>Selected Time: {time}</Text>
+                    <View style={styles.timeContainer}>
+                        <TouchableOpacity onPress={showTimePicker} style={styles.timeButton}>
+                            <Text style={styles.timeButtonText}>Pick Time</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.selectedTime}>Selected Time: {time}</Text>
+                    </View>
                     <DateTimePickerModal
                         isVisible={isTimePickerVisible}
                         mode="time"
                         onConfirm={handleTimeConfirm}
                         onCancel={hideTimePicker}
                     />
-                    <Text>Weekdays:</Text>
+                    <Text style={styles.weekdaysText}>Select Weekdays:</Text>
                     <ScrollView style={styles.weekdayList}>
                         {weekdays.map((weekday) => (
                             <TouchableOpacity key={weekday} onPress={() => toggleWeekday(weekday)} style={styles.weekdayItem}>
                                 <View style={selectedWeekdays.includes(weekday) ? styles.checkboxSelected : styles.checkbox}></View>
-                                <Text style={{ marginRight: 10 }}>{weekday}</Text>
+                                <Text style={styles.weekdayName}>{weekday}</Text>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
-                    <TouchableOpacity onPress={saveReminder} style={styles.saveButton}>
+                    <TouchableOpacity onPress={saveReminder} style={styles.button}>
                         <Text style={styles.buttonText}>Save</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={resetForm} style={styles.cancelButton}>
+                    <TouchableOpacity onPress={resetForm} style={[styles.button, styles.cancelButton]}>
                         <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                 </View>
@@ -80,7 +84,6 @@ const ReminderModal = ({ visible, onClose, onSave }) => {
         </Modal>
     );
 };
-
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -95,16 +98,42 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '80%',
     },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: 'center',
+    },
     input: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: '#ccc',
         borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10
+        marginBottom: 15,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+    },
+    timeContainer: {
+        marginBottom: 15,
+    },
+    timeButton: {
+        backgroundColor: '#4aa9f7',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 5,
+    },
+    timeButtonText: {
+        color: 'white',
+        textAlign: 'center',
+    },
+    selectedTime: {
+        marginBottom: 5,
+    },
+    weekdaysText: {
+        marginBottom: 5,
     },
     weekdayList: {
         maxHeight: 150,
-        marginTop: 10,
+        marginBottom: 15,
     },
     weekdayItem: {
         flexDirection: 'row',
@@ -115,31 +144,33 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         borderWidth: 2,
-        borderColor: '#000',
+        borderColor: '#4aa9f7',
         marginRight: 10,
+        borderRadius: 5,
     },
     checkboxSelected: {
         width: 20,
         height: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: '#4aa9f7',
+        marginRight: 10,
+        borderRadius: 5,
+    },
+    weekdayName: {
         marginRight: 10,
     },
-    saveButton: {
-        backgroundColor: '#007bff',
+    button: {
+        backgroundColor: '#4aa9f7',
         borderRadius: 5,
         padding: 10,
-        marginTop: 10
+        marginTop: 10,
     },
     cancelButton: {
         backgroundColor: 'gray',
-        borderRadius: 5,
-        padding: 10,
-        marginTop: 10
     },
     buttonText: {
         color: 'white',
         fontSize: 18,
-        textAlign: 'center'
+        textAlign: 'center',
     },
 });
 

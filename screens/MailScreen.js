@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Appearance } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { sendEmail } from '../components/sendEmail'; // Adjust the path as necessary
 
@@ -86,19 +86,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     padding: 20,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#4aa9f7',
   },
   picker: {
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
   },
   messageContainer: {
@@ -110,19 +119,19 @@ const styles = StyleSheet.create({
     padding: 10,
     minHeight: 100,
     textAlignVertical: 'top',
-    backgroundColor: 'white',
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
-    fontSize: 14,
+    fontSize: 16,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#4aa9f7',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#ffffff',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

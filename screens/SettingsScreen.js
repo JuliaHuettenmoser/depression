@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Alert, Appearance, Switch } from 'react-native';
 import { googleDriveImport, googleDriveExport } from '../services/GoogleDriveService';
 import { authorize } from 'react-native-app-auth'; // For OAuth
 
 const MyComponent = () => {
   const [statusMessage, setStatusMessage] = useState('');
+  const [darkMode, setDarkMode] = useState(Appearance.getColorScheme() === 'dark');
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setDarkMode(colorScheme === 'dark');
+    });
+    return () => subscription.remove();
+  }, []);
 
   // Placeholder function to initiate OAuth flow and get access token
   const getAccessToken = async () => {
@@ -47,8 +55,13 @@ const MyComponent = () => {
     }
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    // You can implement logic here to toggle dark mode theme in your application
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, darkMode ? styles.darkContainer : null]}>
       <TouchableOpacity onPress={handleImport} style={styles.button}>
         <Text style={styles.buttonText}>Import from Google Drive</Text>
       </TouchableOpacity>
@@ -68,8 +81,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
+  darkContainer: {
+    backgroundColor: '#1f1f1f', // Dark mode background color
+  },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#4aa9f7',
     padding: 15,
     borderRadius: 5,
     marginVertical: 10,
